@@ -40,7 +40,7 @@ checksum = "77ce24cb58228fbb8aa041425bb1050850ac19177686ea6e0f41a70416f56fdb"
 [[package]]
 name = "font-types"
 version = "0.12.7"
-source = "git+https://github.com/googlefonts/fontations?branch=main#53738ff007f9b76dff4ec46c59bedb6cc81c0c86"
+source = "git+https://github.com/googlefonts/fontations?branch=main#ffed1858f4a137afd89d0aafe2aec18dff3e7232"
 dependencies = [
  "bytemuck",
 ]
@@ -84,7 +84,7 @@ dependencies = [
 [[package]]
 name = "read-fonts"
 version = "0.45.1"
-source = "git+https://github.com/googlefonts/fontations?branch=main#53738ff007f9b76dff4ec46c59bedb6cc81c0c86"
+source = "git+https://github.com/googlefonts/fontations?branch=main#ffed1858f4a137afd89d0aafe2aec18dff3e7232"
 dependencies = [
  "bytemuck",
  "foldhash",
@@ -140,7 +140,7 @@ dependencies = [
 [[package]]
 name = "skrifa"
 version = "0.48.0"
-source = "git+https://github.com/googlefonts/fontations?branch=main#53738ff007f9b76dff4ec46c59bedb6cc81c0c86"
+source = "git+https://github.com/googlefonts/fontations?branch=main#ffed1858f4a137afd89d0aafe2aec18dff3e7232"
 dependencies = [
  "bytemuck",
  "once_cell",

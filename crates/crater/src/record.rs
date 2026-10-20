@@ -2,13 +2,14 @@
 //!
 //! ```text
 //! font <id>
-//! config <name>                 unscaled, or ppem=<n>
+//! config <name>                 unscaled, or <mode>=<ppem>
 //! glyph <gid> <advance> <path>
 //! glyph <gid> error <reason>
 //! ```
 //!
 //! Unscaled coordinates and advances are font units. Scaled coordinates are
-//! 26.6 and scaled advances 16.16, all integers. A path is a sequence of
+//! 26.6. Unhinted scaled advances are 16.16 and hinted advances 26.6. All
+//! are integers. A path is a sequence of
 //! `M x y`, `L x y`, `Q cx cy x y`, `C cx0 cy0 cx1 cy1 x y` and `Z`.
 
 use std::collections::BTreeMap;

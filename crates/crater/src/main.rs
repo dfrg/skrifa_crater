@@ -1,13 +1,14 @@
 //! Compares skrifa with FreeType and HarfBuzz over a set of fonts.
 //!
 //! ```text
-//! crater dump <fonts.txt> <ppem>...                      > skrifa.txt
+//! crater dump <fonts.txt> <config>...                    > skrifa.txt
 //! crater compare <oracle.txt> <skrifa.txt> [key=value]... > result.json
 //! ```
 //!
-//! `fonts.txt` has one `<id> <path>` line per font. A ppem of 0 means font
-//! units. The `key=value` pairs are recorded in the result, to say which
-//! fontations ref and oracle versions produced it.
+//! `fonts.txt` has one `<id> <path>` line per font. A config is `unscaled`
+//! or `<mode>=<ppem>`; see `dump::parse_mode`. The `key=value` pairs are
+//! recorded in the result, to say which fontations ref and oracle versions
+//! produced it.
 
 mod compare;
 mod dump;
@@ -23,7 +24,7 @@ fn main() -> ExitCode {
         Some("dump") if args.len() >= 3 => run_dump(&args[1], &args[2..]),
         Some("compare") if args.len() >= 3 => run_compare(&args[1], &args[2], &args[3..]),
         _ => {
-            eprintln!("usage: crater dump <fonts.txt> <ppem>...");
+            eprintln!("usage: crater dump <fonts.txt> <config>...");
             eprintln!("       crater compare <oracle.txt> <skrifa.txt> [key=value]...");
             return ExitCode::from(2);
         }
@@ -37,11 +38,7 @@ fn main() -> ExitCode {
     }
 }
 
-fn run_dump(list: &str, sizes: &[String]) -> Result<(), String> {
-    let sizes: Vec<u32> = sizes
-        .iter()
-        .map(|s| s.parse().map_err(|_| format!("bad ppem {s}")))
-        .collect::<Result<_, _>>()?;
+fn run_dump(list: &str, configs: &[String]) -> Result<(), String> {
     let list = std::fs::read_to_string(list).map_err(|e| format!("{list}: {e}"))?;
     let mut out = BufWriter::new(std::io::stdout().lock());
     for line in list.lines() {
@@ -49,7 +46,7 @@ fn run_dump(list: &str, sizes: &[String]) -> Result<(), String> {
             continue;
         };
         let data = std::fs::read(path).map_err(|e| format!("{path}: {e}"))?;
-        dump::dump_font(&mut out, id, data, &sizes).map_err(|e| e.to_string())?;
+        dump::dump_font(&mut out, id, data, configs).map_err(|e| e.to_string())?;
     }
     out.flush().map_err(|e| e.to_string())
 }

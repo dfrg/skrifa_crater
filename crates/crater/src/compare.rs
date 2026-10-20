@@ -91,10 +91,11 @@ fn distance(a: &[Element], b: &[Element]) -> Distance {
     Distance::Points(max)
 }
 
-/// Returns the advance tolerance for a configuration: half a font unit
-/// unscaled, and 1/64 of a pixel in 16.16 when scaled.
+/// Returns the advance tolerance for a configuration. Unscaled and hinted
+/// advances are whole font units and 26.6 values, and must match. Unhinted
+/// scaled advances are 16.16 and may differ by 1/64 of a pixel.
 fn advance_tolerance(config: &str) -> i64 {
-    if config == "unscaled" { 0 } else { 1024 }
+    if config.starts_with("ppem=") { 1024 } else { 0 }
 }
 
 pub fn compare(oracle: &Records, skrifa: &Records, meta: BTreeMap<String, String>) -> Report {

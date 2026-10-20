@@ -8,6 +8,13 @@ publish = false
 [dependencies]
 # Runs replace this with a fontations checkout at the ref under test, via
 # `--config patch."https://github.com/googlefonts/fontations".skrifa.path=...`.
-skrifa = { git = "https://github.com/googlefonts/fontations", branch = "main" }
+skrifa = { git = "https://github.com/googlefonts/fontations", branch = "main", default-features = false, features = ["std", "agl"] }
 serde = { version = "1", features = ["derive"] }
 serde_json = "1"
+
+[features]
+default = ["shaping"]
+# skrifa's best-effort shaping for the automatic hinter. Without it, the
+# hinter finds glyphs through the character map alone, as FreeType does
+# when built without HarfBuzz.
+shaping = ["skrifa/autohint_shaping"]

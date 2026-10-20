@@ -21,13 +21,40 @@ FreeType's autohinter cannot compute the scale of a CFF font with nested
 font matrices, and its output for such fonts is wrong."""
 
 [[diff]]
-id = "autohint-mark-composites"
+id = "ft-autohint-diacritics"
 oracle = "freetype"
-configs = ["*autohint*"]
+configs = ["auto*", "autolight*"]
 kinds = ["outline", "advance"]
 status = "not-ported"
 reason = """
-FreeType autohints mark composites; skrifa does not yet."""
+FreeType 2.14 changed how its autohinter places diacritics, separating
+marks from their bases, and autohints mark composites. skrifa's autohinter
+follows 2.13: against FreeType 2.13.3 every glyph of the crater set matches
+except Noto Serif's U+052A."""
+
+[[diff]]
+id = "type1-hinting"
+oracle = "freetype"
+fonts = ["*-t1", "*-pfb"]
+configs = ["native*", "mono*"]
+kinds = ["outline"]
+status = "not-ported"
+reason = """
+FreeType hints Type 1 fonts with its PostScript hinter; skrifa does not
+hint them yet."""
+
+[[diff]]
+id = "ft-harfbuzz-type1-coverage"
+oracle = "freetype"
+fonts = ["*-t1", "*-pfb"]
+configs = ["*-shaped*"]
+kinds = ["outline", "advance"]
+status = "oracle-bug"
+reason = """
+Built with HarfBuzz, FreeType's autohinter changes 609 of NimbusSans's 855
+glyphs; skrifa's shaping changes none. A Type 1 font has no SFNT tables, so
+HarfBuzz likely reads no character map through FreeType and the autohinter
+finds no script coverage."""
 
 [[diff]]
 id = "line-metric-signs"

@@ -1,7 +1,7 @@
 //! Dumps glyph outlines and advances from skrifa in the record format.
 
 use crate::record::{Element, write_path};
-use skrifa::{DrawMemory, GlyphId, PathSink, ScalerFont, font::Font};
+use skrifa::{DrawMemory, GlyphId, HintOptions, PathSink, RasterTarget, ScalerFont, font::Font};
 use std::io::Write;
 
 /// Collects a path as record elements, converting each coordinate.
@@ -37,26 +37,65 @@ impl<F: Fn(f32) -> i64> PathSink for Recorder<F> {
     }
 }
 
-/// Writes the records of one font for each size in `sizes`, where 0 means
-/// font units.
+/// How a configuration draws.
+enum Mode {
+    /// Font units.
+    Unscaled,
+    /// At a size, unhinted.
+    Unhinted(f32),
+    /// At a size, hinted as the options ask.
+    Hinted(f32, HintOptions),
+}
+
+/// Parses a configuration name: `unscaled`, or `<mode>=<ppem>` where the
+/// mode may carry a suffix after a hyphen that only names it.
+///
+/// The hinted modes match FreeType's load flags: `native` runs the font's
+/// own hints with FreeType's TrueType interpreter behavior, `mono` does so
+/// for a monochrome target, and `auto` and `autolight` run the automatic
+/// hinter.
+fn parse_mode(config: &str) -> Option<Mode> {
+    if config == "unscaled" {
+        return Some(Mode::Unscaled);
+    }
+    let (name, ppem) = config.split_once('=')?;
+    let ppem: f32 = ppem.parse().ok()?;
+    let base = name.split('-').next()?;
+    let options = match base {
+        "ppem" => return Some(Mode::Unhinted(ppem)),
+        "native" => HintOptions::interpreter().with_classic_cleartype(true),
+        "mono" => HintOptions::interpreter()
+            .with_classic_cleartype(true)
+            .with_target(RasterTarget::Mono),
+        "auto" => HintOptions::auto(),
+        "autolight" => HintOptions::auto().with_target(RasterTarget::Light),
+        _ => return None,
+    };
+    Some(Mode::Hinted(ppem, options))
+}
+
+/// Writes the records of one font for each configuration.
 pub fn dump_font(
     out: &mut impl Write,
     id: &str,
     data: Vec<u8>,
-    sizes: &[u32],
+    configs: &[String],
 ) -> std::io::Result<()> {
     writeln!(out, "font {id}")?;
     let Some(font) = Font::new(data, 0) else {
         return writeln!(out, "error load");
     };
-    for &ppem in sizes {
-        let scaled = ppem != 0;
-        if scaled {
-            writeln!(out, "config ppem={ppem}")?;
-        } else {
-            writeln!(out, "config unscaled")?;
-        }
-        let scaler = ScalerFont::unhinted(font.clone(), scaled.then_some(ppem as f32));
+    for config in configs {
+        let Some(mode) = parse_mode(config) else {
+            continue;
+        };
+        writeln!(out, "config {config}")?;
+        let (scaler, hinted) = match mode {
+            Mode::Unscaled => (ScalerFont::unhinted(font.clone(), None), false),
+            Mode::Unhinted(ppem) => (ScalerFont::unhinted(font.clone(), Some(ppem)), false),
+            Mode::Hinted(ppem, options) => (ScalerFont::hinted(font.clone(), ppem, options), true),
+        };
+        let scaled = scaler.ppem().is_some();
         let metrics = scaler.linear_glyph_metrics();
         for gid in 0..font.num_glyphs() {
             let glyph = GlyphId::new(gid);
@@ -73,17 +112,23 @@ pub fn dump_font(
                 path: Vec::new(),
                 convert,
             };
-            if let Some(outline) = scaler.outline(glyph)
-                && let Err(error) = outline.draw(DrawMemory::Scratch, &mut recorder)
-            {
-                writeln!(out, "glyph {gid} error {error:?}")?;
-                continue;
+            let mut drawn_advance = None;
+            if let Some(outline) = scaler.outline(glyph) {
+                match outline.draw(DrawMemory::Scratch, &mut recorder) {
+                    Ok(drawn) => drawn_advance = drawn.h_advance,
+                    Err(error) => {
+                        writeln!(out, "glyph {gid} error {error:?}")?;
+                        continue;
+                    }
+                }
             }
-            let advance = metrics.h_advance(glyph);
-            let advance = if scaled {
-                (advance * 65536.0).round() as i64
+            let linear = metrics.h_advance(glyph);
+            let advance = if hinted {
+                (drawn_advance.unwrap_or(linear) * 64.0).round() as i64
+            } else if scaled {
+                (linear * 65536.0).round() as i64
             } else {
-                advance.round() as i64
+                linear.round() as i64
             };
             writeln!(out, "glyph {gid} {advance} {}", write_path(&recorder.path))?;
         }
