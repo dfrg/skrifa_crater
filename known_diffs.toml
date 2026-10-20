@@ -37,12 +37,3 @@ status = "by-design"
 reason = """
 skrifa reads ascenders above the baseline and descenders below it whatever
 sign a font stores, as HarfBuzz does. FreeType keeps the stored sign."""
-
-[[diff]]
-id = "type1-mm-design-map"
-oracle = "freetype"
-kinds = ["outline", "advance"]
-status = "by-design"
-reason = """
-skrifa maps Type 1 multiple master design coordinates to blends as the
-specification does. FreeType's mapping differs at fractional positions."""
