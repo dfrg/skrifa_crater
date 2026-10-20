@@ -1,0 +1,8 @@
+[workspace]
+resolver = "3"
+members = ["crates/crater"]
+exclude = [".cache"]
+
+[workspace.package]
+edition = "2024"
+license = "MIT OR Apache-2.0"

@@ -1,0 +1,69 @@
+name: crater
+
+on:
+  workflow_dispatch:
+    inputs:
+      refs:
+        description: Fontations refs to run, separated by spaces
+        default: main
+      repo:
+        description: Fontations repository
+        default: https://github.com/googlefonts/fontations
+  schedule:
+    - cron: "0 6 * * *"
+
+permissions:
+  contents: write
+
+concurrency:
+  group: crater
+  cancel-in-progress: false
+
+jobs:
+  run:
+    runs-on: ubuntu-latest
+    env:
+      REFS: ${{ inputs.refs || 'main' }}
+      REPO: ${{ inputs.repo || 'https://github.com/googlefonts/fontations' }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install build tools
+        run: sudo apt-get update && sudo apt-get install -y meson ninja-build
+
+      - uses: dtolnay/rust-toolchain@stable
+
+      - uses: actions/cache@v4
+        with:
+          path: |
+            .cache/fonts
+            .cache/freetype-*
+            ~/.cargo/registry
+            ~/.cargo/git
+            target
+          key: crater-${{ hashFiles('oracles/**', 'fonts/manifest.toml', 'Cargo.lock') }}
+          restore-keys: crater-
+
+      - name: Run
+        run: |
+          for ref in $REFS; do
+            bash scripts/run.sh "$ref" "$REPO"
+          done
+
+      - name: Publish
+        run: |
+          git fetch origin gh-pages || true
+          if git rev-parse --verify -q origin/gh-pages; then
+            git worktree add pages origin/gh-pages
+          else
+            git worktree add --orphan -b gh-pages pages
+          fi
+          cp site/* pages/
+          touch pages/.nojekyll
+          results=$(ls out/*.json)
+          python3 scripts/publish.py pages $results
+          cd pages
+          git add -A
+          git -c user.name="crater" -c user.email="crater@users.noreply.github.com" \
+            commit -q -m "Results for $REFS"
+          git push origin HEAD:gh-pages

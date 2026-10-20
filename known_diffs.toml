@@ -1,0 +1,48 @@
+# Differences from the oracles that are expected, each with its reason.
+#
+# A mismatch that matches an entry is reported as expected rather than as a
+# regression. `fonts` and `configs` are glob patterns; `kinds` names the
+# comparisons the entry covers. Entries are matched once hinted and
+# HarfBuzz comparisons land.
+#
+# status is one of:
+#   oracle-bug   the oracle is wrong; skrifa is right
+#   by-design    skrifa deliberately differs
+#   not-ported   skrifa lacks something the oracle has; it should go away
+
+[[diff]]
+id = "ft-autohint-cff-nested-matrix"
+oracle = "freetype"
+configs = ["*autohint*"]
+kinds = ["outline"]
+status = "oracle-bug"
+reason = """
+FreeType's autohinter cannot compute the scale of a CFF font with nested
+font matrices, and its output for such fonts is wrong."""
+
+[[diff]]
+id = "autohint-mark-composites"
+oracle = "freetype"
+configs = ["*autohint*"]
+kinds = ["outline", "advance"]
+status = "not-ported"
+reason = """
+FreeType autohints mark composites; skrifa does not yet."""
+
+[[diff]]
+id = "line-metric-signs"
+oracle = "freetype"
+kinds = ["ascender", "descender"]
+status = "by-design"
+reason = """
+skrifa reads ascenders above the baseline and descenders below it whatever
+sign a font stores, as HarfBuzz does. FreeType keeps the stored sign."""
+
+[[diff]]
+id = "type1-mm-design-map"
+oracle = "freetype"
+kinds = ["outline", "advance"]
+status = "by-design"
+reason = """
+skrifa maps Type 1 multiple master design coordinates to blends as the
+specification does. FreeType's mapping differs at fractional positions."""

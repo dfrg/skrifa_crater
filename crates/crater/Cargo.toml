@@ -1,0 +1,13 @@
+[package]
+name = "crater"
+version = "0.1.0"
+edition.workspace = true
+license.workspace = true
+publish = false
+
+[dependencies]
+# Runs replace this with a fontations checkout at the ref under test, via
+# `--config patch."https://github.com/googlefonts/fontations".skrifa.path=...`.
+skrifa = { git = "https://github.com/googlefonts/fontations", branch = "main" }
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"

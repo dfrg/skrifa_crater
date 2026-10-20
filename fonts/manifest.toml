@@ -1,0 +1,68 @@
+# Fonts under test.
+#
+# Each font is fetched from a URL pinned to a commit or tag and checked
+# against its SHA-256. `scripts/fetch_fonts.py --pin` fills in a missing
+# hash. Fonts are not redistributed here; built fonts live in fonts/built.
+
+[[font]]
+id = "roboto-var"
+url = "https://raw.githubusercontent.com/google/fonts/47d54ca1ebb14fd864695f1d39dc734f39017c33/ofl/roboto/Roboto%5Bwdth,wght%5D.ttf"
+sha256 = "d7598e12c5dbef095ff8272cfc55da0250bd07fbdecbac8a530b9b277872a134"
+license = "OFL-1.1"
+covers = ["glyf", "gvar", "HVAR", "hinted-tt"]
+
+[[font]]
+id = "notoserif-var"
+url = "https://raw.githubusercontent.com/google/fonts/47d54ca1ebb14fd864695f1d39dc734f39017c33/ofl/notoserif/NotoSerif%5Bwdth,wght%5D.ttf"
+sha256 = "4d8e6761424656867019081a1a01336f3cb086982682698714054fc33f782713"
+license = "OFL-1.1"
+covers = ["glyf", "gvar", "composites"]
+
+[[font]]
+id = "sourcesans3-var"
+url = "https://raw.githubusercontent.com/google/fonts/47d54ca1ebb14fd864695f1d39dc734f39017c33/ofl/sourcesans3/SourceSans3%5Bwght%5D.ttf"
+sha256 = "042fe2cc0b933e328410d7acbd0aa6a1873dca5aef81875f4bc214b08825c7b9"
+license = "OFL-1.1"
+covers = ["glyf", "gvar"]
+
+[[font]]
+id = "sourceserif4-cff"
+url = "https://raw.githubusercontent.com/adobe-fonts/source-serif/4.005R/OTF/SourceSerif4-Regular.otf"
+sha256 = "edf160d0d584deee8a3bb2c3371b2a7624ca63580fbe02c57c1f4c91e84d8787"
+license = "OFL-1.1"
+covers = ["CFF", "hinted-ps"]
+
+[[font]]
+id = "sourceserif4-cff2"
+url = "https://raw.githubusercontent.com/adobe-fonts/source-serif/4.005R/VAR/SourceSerif4Variable-Roman.otf"
+sha256 = "867b73c6a954a4a64616906d179f94572a748790a1d022ebeeff07f56ea0221a"
+license = "OFL-1.1"
+covers = ["CFF2", "blend"]
+
+[[font]]
+id = "nimbusroman-t1"
+url = "https://raw.githubusercontent.com/ArtifexSoftware/urw-base35-fonts/20200910/fonts/NimbusRoman-Regular.t1"
+sha256 = "cd63681b669f41d2b1cc828a6e26eeeee668ae3f9144f6ae2c1bad971fc146f2"
+license = "AGPL-3.0-with-font-exception"
+covers = ["Type1"]
+
+[[font]]
+id = "nimbussans-t1"
+url = "https://raw.githubusercontent.com/ArtifexSoftware/urw-base35-fonts/20200910/fonts/NimbusSans-Regular.t1"
+sha256 = "779a9c820bbe8b470d36e77bcf949eef7bf1b889184274ba0f51da4c8c883cfa"
+license = "AGPL-3.0-with-font-exception"
+covers = ["Type1"]
+
+[[font]]
+id = "notoserif-pfb"
+url = "https://raw.githubusercontent.com/googlefonts/fontations/2a6bdb532a4920fc9fa381a67e1146ee595b8064/font-test-data/test_data/type1/notoserif-regular.subset.pfb"
+sha256 = "0fb2221267a3e3e5397f331a42aad5ae7e09799ef2b59c3909e40b0a03c4ee19"
+license = "OFL-1.1"
+covers = ["Type1", "pfb"]
+
+[[font]]
+id = "vazirmatn-trimmed"
+url = "https://raw.githubusercontent.com/googlefonts/fontations/2a6bdb532a4920fc9fa381a67e1146ee595b8064/font-test-data/test_data/ttf/vazirmatn_var_trimmed.ttf"
+sha256 = "c6f1e46d4ed8c59e14b5a90af56378ca9d6c39bba218bda643f6fc0764f8dabb"
+license = "OFL-1.1"
+covers = ["glyf", "gvar"]
