@@ -15,6 +15,9 @@
 # still gets a result, marked as a failed build.
 
 set -euo pipefail
+# A failed oracle build inside $(...) must stop the run, not cache an
+# empty dump.
+shopt -s inherit_errexit
 
 root=$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)
 ref=${1:-main}
@@ -30,9 +33,15 @@ ls .cache/fonts/* | while read -r path; do
     echo "${name%.*} $path"
 done > .cache/fonts.txt
 
-ft_tag=$(sed -n 's/^freetype = "\(.*\)"/\1/p' oracles/versions.toml)
+ft_tag=${CRATER_FREETYPE_TAG:-$(sed -n 's/^freetype = "\(.*\)"/\1/p' oracles/versions.toml)}
 # The oracle's patches are part of its version.
-for patch in oracles/freetype/*.patch; do
+patches=()
+if [ -z "${CRATER_FREETYPE_NO_PATCHES:-}" ]; then
+    shopt -s nullglob
+    patches=(oracles/freetype/*.patch)
+    shopt -u nullglob
+fi
+for patch in "${patches[@]}"; do
     ft_tag="$ft_tag+$(basename "$patch" .patch)"
 done
 hb_tag=$(sed -n 's/^harfbuzz = "\(.*\)"/\1/p' oracles/versions.toml)
@@ -44,8 +53,8 @@ oracle_dump() {
     local ft_dump key out
     ft_dump=$(bash oracles/freetype/build.sh $variant)
     key=$(cat fonts/manifest.toml oracles/versions.toml oracles/freetype/ft_dump.c \
-        oracles/freetype/*.patch \
-        <(echo "$variant $*") | sha256sum | cut -c1-16)
+        "${patches[@]}" \
+        <(echo "$ft_tag $variant $*") | sha256sum | cut -c1-16)
     out=".cache/oracle-$key.txt"
     if [ ! -f "$out" ]; then
         "$ft_dump" .cache/fonts.txt "$@" > "$out.tmp"

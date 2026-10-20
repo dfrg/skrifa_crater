@@ -1,4 +1,4 @@
 # Pinned oracle versions. Results record these, and a change to either
 # invalidates cached oracle dumps.
-freetype = "VER-2-15-0"
+freetype = "VER-2-13-3"
 harfbuzz = "14.6.0"
