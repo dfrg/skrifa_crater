@@ -21,18 +21,6 @@ FreeType's autohinter cannot compute the scale of a CFF font with nested
 font matrices, and its output for such fonts is wrong."""
 
 [[diff]]
-id = "ft-autohint-diacritics"
-oracle = "freetype"
-configs = ["auto*", "autolight*"]
-kinds = ["outline", "advance"]
-status = "not-ported"
-reason = """
-FreeType 2.14 changed how its autohinter places diacritics, separating
-marks from their bases, and autohints mark composites. skrifa's autohinter
-follows 2.13: against FreeType 2.13.3 every glyph of the crater set matches
-except Noto Serif's U+052A."""
-
-[[diff]]
 id = "type1-hinting"
 oracle = "freetype"
 fonts = ["*-t1", "*-pfb"]

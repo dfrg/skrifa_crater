@@ -4,8 +4,10 @@
 # Usage: build.sh [hb]
 #
 # With `hb`, FreeType is built with HarfBuzz, which its autohinter uses to
-# find the glyphs each script and feature reaches. Output goes to
-# .cache/freetype-<tag>[-hb]. Prints the path of ft_dump.
+# find the glyphs each script and feature reaches. Every patch in
+# oracles/freetype/*.patch is applied first; see the patches for why.
+# Output goes to .cache/freetype-<tag>[-hb]-<patches hash>. Prints the path
+# of ft_dump.
 
 set -euo pipefail
 
@@ -13,7 +15,9 @@ root=$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)
 # CRATER_FREETYPE_TAG overrides the pinned tag, for experiments.
 tag=${CRATER_FREETYPE_TAG:-$(sed -n 's/^freetype = "\(.*\)"/\1/p' "$root/oracles/versions.toml")}
 variant=${1:-}
-out="$root/.cache/freetype-$tag${variant:+-$variant}"
+patches=("$root"/oracles/freetype/*.patch)
+patches_hash=$(cat "${patches[@]}" | sha256sum | cut -c1-8)
+out="$root/.cache/freetype-$tag${variant:+-$variant}-$patches_hash"
 harfbuzz=disabled
 libs=()
 if [ "$variant" = hb ]; then
@@ -28,6 +32,9 @@ if [ ! -x "$out/ft_dump" ] || [ "$root/oracles/freetype/ft_dump.c" -nt "$out/ft_
         rm -rf "$out"
         git clone -q --depth 1 --branch "$tag" \
             https://gitlab.freedesktop.org/freetype/freetype.git "$out/src" 2> /dev/null
+        for patch in "${patches[@]}"; do
+            git -C "$out/src" apply "$patch"
+        done
         meson setup "$out/build" "$out/src" --buildtype=release \
             -Ddefault_library=static -Dzlib=disabled -Dbzip2=disabled \
             -Dpng=disabled -Dharfbuzz=$harfbuzz -Dbrotli=disabled > /dev/null

@@ -53,6 +53,10 @@ and on demand for any refs, and pushes to the `gh-pages` branch.
   builds FreeType at that tag, with or without HarfBuzz, and a small dumper
   against it. Its output depends only on the fonts and the versions, so it
   is cached. `CRATER_FREETYPE_TAG` overrides the tag for experiments.
+  The patches in `oracles/freetype` are applied first, and results name
+  them in the FreeType version: `no-diacritics` turns off the diacritic
+  handling FreeType 2.14 added to its autohinter, which skrifa deliberately
+  does not have.
 - `crates/crater` dumps the same records from skrifa, built against the
   fontations ref under test, and compares them. Paths are regularized
   first: FreeType closes contours implicitly and both sides emit some
