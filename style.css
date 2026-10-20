@@ -1,0 +1,84 @@
+:root {
+  --bg: #ffffff;
+  --fg: #1d1f23;
+  --muted: #6a6f78;
+  --line: #e2e4e8;
+  --panel: #f6f7f9;
+  --ok: #1f7a3d;
+  --ok-bg: #e3f4e8;
+  --warn: #8a5a00;
+  --warn-bg: #fdf1d8;
+  --bad: #b3261e;
+  --bad-bg: #fbe4e2;
+  --oracle: #2f6fde;
+  --skrifa: #d6336c;
+  --link: #2f6fde;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #15171b;
+    --fg: #e6e7ea;
+    --muted: #9aa0aa;
+    --line: #2c3037;
+    --panel: #1d2026;
+    --ok: #6fd391;
+    --ok-bg: #173323;
+    --warn: #f2c35b;
+    --warn-bg: #3a2e12;
+    --bad: #ff8a80;
+    --bad-bg: #3d1b19;
+    --oracle: #7aa7ff;
+    --skrifa: #ff7aa8;
+    --link: #7aa7ff;
+  }
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0 auto;
+  max-width: 1100px;
+  padding: 0 16px 48px;
+  background: var(--bg);
+  color: var(--fg);
+  font: 15px/1.5 system-ui, -apple-system, "Segoe UI", sans-serif;
+}
+
+a { color: var(--link); text-decoration: none; }
+a:hover { text-decoration: underline; }
+
+header { padding: 24px 0 8px; border-bottom: 1px solid var(--line); margin-bottom: 16px; }
+header h1 { margin: 0; font-size: 22px; }
+header h1 a { color: var(--fg); }
+header p { margin: 4px 0 0; color: var(--muted); }
+
+h2 { font-size: 18px; margin: 24px 0 8px; }
+h3 { font-size: 15px; margin: 16px 0 6px; }
+
+.muted { color: var(--muted); }
+code, .mono { font-family: ui-monospace, SFMono-Regular, Consolas, monospace; font-size: 13px; }
+
+.scroll { overflow-x: auto; }
+
+table { border-collapse: collapse; width: 100%; }
+th, td { text-align: left; padding: 6px 10px; border-bottom: 1px solid var(--line); white-space: nowrap; }
+th { font-weight: 600; color: var(--muted); font-size: 13px; }
+td.num, th.num { text-align: right; font-variant-numeric: tabular-nums; }
+
+.badge { display: inline-block; padding: 1px 8px; border-radius: 10px; font-size: 12px; font-weight: 600; }
+.ok { color: var(--ok); background: var(--ok-bg); }
+.warn { color: var(--warn); background: var(--warn-bg); }
+.bad { color: var(--bad); background: var(--bad-bg); }
+
+.cell { display: inline-block; min-width: 64px; text-align: center; border-radius: 6px; padding: 2px 6px; }
+
+.examples { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 12px; }
+.example { background: var(--panel); border: 1px solid var(--line); border-radius: 8px; padding: 8px; }
+.example svg { width: 100%; height: 200px; display: block; }
+.example .label { font-size: 13px; margin-bottom: 4px; }
+.legend span { margin-right: 12px; font-size: 13px; }
+.legend .o { color: var(--oracle); }
+.legend .s { color: var(--skrifa); }
+
+pre.log { background: var(--panel); border: 1px solid var(--line); padding: 8px; overflow-x: auto; font-size: 12px; }

@@ -1,0 +1,21 @@
+[
+ {
+  "file": "2026-10-20T17_29_42Z-main-53738ff0.json",
+  "meta": {
+   "date": "2026-10-20T17:29:42Z",
+   "freetype": "VER-2-15-0",
+   "ref": "main",
+   "repo": "https://github.com/googlefonts/fontations",
+   "sha": "53738ff007f9b76dff4ec46c59bedb6cc81c0c86"
+  },
+  "build_failed": false,
+  "totals": {
+   "glyphs": 49140,
+   "match": 49140,
+   "off_by_one": 0,
+   "mismatch": 0,
+   "advance": 0,
+   "errors": 0
+  }
+ }
+]
