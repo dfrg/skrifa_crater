@@ -1,5 +1,45 @@
 [
  {
+  "file": "2026-10-20T18_25_22Z-skrifa_autohint-unicode18-045cfce3.json",
+  "meta": {
+   "date": "2026-10-20T18:25:22Z",
+   "freetype": "VER-2-15-0+no-diacritics",
+   "harfbuzz": "14.6.0",
+   "ref": "skrifa/autohint-unicode18",
+   "repo": "https://github.com/googlefonts/fontations",
+   "sha": "045cfce3d91b68d34694fb14f2a4d280134e3f22"
+  },
+  "build_failed": false,
+  "totals": {
+   "glyphs": 159705,
+   "match": 146813,
+   "off_by_one": 829,
+   "mismatch": 12063,
+   "advance": 527,
+   "errors": 0
+  }
+ },
+ {
+  "file": "2026-10-20T18_25_01Z-main-13c919d2.json",
+  "meta": {
+   "date": "2026-10-20T18:25:01Z",
+   "freetype": "VER-2-15-0+no-diacritics",
+   "harfbuzz": "14.6.0",
+   "ref": "main",
+   "repo": "https://github.com/googlefonts/fontations",
+   "sha": "13c919d2ccd9d9da5e04bc6fdf4cbf106ce80585"
+  },
+  "build_failed": false,
+  "totals": {
+   "glyphs": 159705,
+   "match": 146368,
+   "off_by_one": 829,
+   "mismatch": 12508,
+   "advance": 623,
+   "errors": 0
+  }
+ },
+ {
   "file": "2026-10-20T17_51_29Z-skrifa_mono-composite-offsets-f3d76bf3.json",
   "meta": {
    "date": "2026-10-20T17:51:29Z",
