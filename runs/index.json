@@ -1,5 +1,25 @@
 [
  {
+  "file": "2026-10-20T17_51_29Z-skrifa_mono-composite-offsets-f3d76bf3.json",
+  "meta": {
+   "date": "2026-10-20T17:51:29Z",
+   "freetype": "VER-2-15-0",
+   "harfbuzz": "14.6.0",
+   "ref": "skrifa/mono-composite-offsets",
+   "repo": "https://github.com/googlefonts/fontations",
+   "sha": "f3d76bf3c45a56547dee390ce9d3a9108e922a92"
+  },
+  "build_failed": false,
+  "totals": {
+   "glyphs": 159705,
+   "match": 142991,
+   "off_by_one": 975,
+   "mismatch": 15739,
+   "advance": 623,
+   "errors": 0
+  }
+ },
+ {
   "file": "2026-10-20T17_48_57Z-main-ffed1858.json",
   "meta": {
    "date": "2026-10-20T17:48:57Z",
