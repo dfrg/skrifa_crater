@@ -53,7 +53,9 @@ enum Mode {
 /// The hinted modes match FreeType's load flags: `native` runs the font's
 /// own hints with FreeType's TrueType interpreter behavior, `mono` does so
 /// for a monochrome target, and `auto` and `autolight` run the automatic
-/// hinter.
+/// hinter. The TrueType modes use the classic ClearType rules that FreeType's
+/// v40 interpreter follows, or the newer ones with an `enhanced` suffix, as in
+/// `native-enhanced`.
 fn parse_mode(config: &str) -> Option<Mode> {
     if config == "unscaled" {
         return Some(Mode::Unscaled);
@@ -61,11 +63,12 @@ fn parse_mode(config: &str) -> Option<Mode> {
     let (name, ppem) = config.split_once('=')?;
     let ppem: f32 = ppem.parse().ok()?;
     let base = name.split('-').next()?;
+    let classic = !name.split('-').skip(1).any(|suffix| suffix == "enhanced");
     let options = match base {
         "ppem" => return Some(Mode::Unhinted(ppem)),
-        "native" => HintOptions::interpreter().with_classic_cleartype(true),
+        "native" => HintOptions::interpreter().with_classic_cleartype(classic),
         "mono" => HintOptions::interpreter()
-            .with_classic_cleartype(true)
+            .with_classic_cleartype(classic)
             .with_target(RasterTarget::Mono),
         "auto" => HintOptions::auto(),
         "autolight" => HintOptions::auto().with_target(RasterTarget::Light),

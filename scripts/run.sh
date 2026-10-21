@@ -22,8 +22,10 @@ shopt -s inherit_errexit
 root=$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)
 ref=${1:-main}
 repo=${2:-https://github.com/googlefonts/fontations}
-plain="unscaled ppem=12 ppem=16 ppem=24 native=12 native=16 native=24 mono=16 auto=12 auto=16 autolight=16"
-shaped="auto-shaped=16 autolight-shaped=16"
+# CRATER_PLAIN and CRATER_SHAPED replace the configurations, for
+# experiments.
+plain="${CRATER_PLAIN:-unscaled ppem=12 ppem=16 ppem=24 native=12 native=16 native=24 mono=16 auto=12 auto=16 autolight=16}"
+shaped="${CRATER_SHAPED:-auto-shaped=16 autolight-shaped=16}"
 cd "$root"
 
 python3 scripts/fetch_fonts.py

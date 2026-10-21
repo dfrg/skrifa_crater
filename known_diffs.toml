@@ -52,3 +52,17 @@ status = "by-design"
 reason = """
 skrifa reads ascenders above the baseline and descenders below it whatever
 sign a font stores, as HarfBuzz does. FreeType keeps the stored sign."""
+
+[[diff]]
+id = "cleartype-uninstructed-fonts"
+oracle = "freetype"
+fonts = ["poppins"]
+configs = ["native-enhanced*"]
+kinds = ["outline"]
+status = "by-design"
+reason = """
+With the enhanced ClearType rules, skrifa follows DirectWrite: a font with
+no glyph instructions and no gasp range for the size is not grid fitted on
+smooth targets, so composite offsets keep fractional positions. FreeType
+runs its hinted load path anyway and rounds them, which moves the marks of
+143 Poppins composites by up to half a pixel."""

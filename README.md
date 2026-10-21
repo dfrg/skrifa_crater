@@ -20,6 +20,12 @@ The plain autohinting configurations build skrifa without its
 glyphs through the character map alone and should agree exactly. The
 `-shaped` ones show where skrifa's shaping and HarfBuzz part ways.
 
+The TrueType configurations use the classic ClearType rules, which follow
+FreeType's v40 interpreter. An `-enhanced` suffix, as in `native-enhanced=16`,
+uses the newer ones instead; FreeType ignores the suffix, so both compare
+against the same oracle output. `CRATER_PLAIN` and `CRATER_SHAPED` replace
+the configurations `scripts/run.sh` runs.
+
 HarfBuzz metrics, coverage-driven font selection and built fonts come
 next.
 
