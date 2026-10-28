@@ -1,5 +1,25 @@
 [
  {
+  "file": "2026-10-28T12_08_31Z-main-a1983bb5.json",
+  "meta": {
+   "date": "2026-10-28T12:08:31Z",
+   "freetype": "VER-2-13-3",
+   "harfbuzz": "14.6.0",
+   "ref": "main",
+   "repo": "https://github.com/googlefonts/fontations",
+   "sha": "a1983bb5fad0598902d034f7e9fcd4ae92725e66"
+  },
+  "build_failed": false,
+  "totals": {
+   "glyphs": 159705,
+   "match": 150429,
+   "off_by_one": 779,
+   "mismatch": 8497,
+   "advance": 448,
+   "errors": 0
+  }
+ },
+ {
   "file": "2026-10-27T11_38_01Z-main-3f6a1faf.json",
   "meta": {
    "date": "2026-10-27T11:38:01Z",
